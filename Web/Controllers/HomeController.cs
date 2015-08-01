@@ -33,16 +33,19 @@ namespace Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            //获取图书类别和当前页
             int categoryId = int.Parse(Request.QueryString["category"] ?? "1");
             int currentPage = int.Parse(Request.QueryString["page"] ?? "1");
 
-
+            //更具当前页，页大小，图书类别获取分页图书
             List<Book> books = GetPageBooks(currentPage, pageSize, b => b.categoryId == categoryId);
             int total = bse.Books.Count(b => b.categoryId == categoryId);
 
+            //获取图书分类
             List<Category> categories = bse.Categories.Where(c => true).ToList();
             ViewBag.Categories = categories;
-
+            
+            //动态跟新分页组件
             ViewBag.Page = GetPage(currentPage, pageSize, total, "&category=" + categoryId);
             return View(books);
         } 
@@ -196,6 +199,10 @@ namespace Web.Controllers
         /// <returns>分页html代码</returns>
         public MvcHtmlString GetPage(int currentPage, int pageSize, int total,string query)
         {
+            if (total<=0)
+            {
+                return new MvcHtmlString("");
+            }
             int len = (int)Math.Ceiling(total * 1.0 / pageSize);
 
             StringBuilder sb = new StringBuilder();
