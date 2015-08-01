@@ -1,0 +1,19 @@
+﻿@using Models
+@model System.Collections.Generic.List<Models.FriendLink>
+
+@{
+    ViewBag.Title = "友情链接";
+}
+
+<div class="row">
+    @foreach (var link in Model)
+    {
+        <div class="col-sm-4 col-md-3">
+            <div class="thumbnail">
+                <a href="@link.url">
+                    <img style="width: 100%; height: 200px; display: block;" alt="@link.name" src="~/@link.img">
+                </a>
+            </div>
+        </div>
+    }
+</div>

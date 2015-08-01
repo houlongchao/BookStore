@@ -1,0 +1,67 @@
+﻿@using Models
+@model System.Collections.Generic.List<Models.Order>
+
+@{
+    ViewBag.Title = "我的订单";
+}
+<style>
+    .row {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .line-center {
+        line-height: 50px;
+        text-align: center;
+    }
+
+    .row input {
+        width: 50px;
+    }
+
+    .list-group-item:hover {
+        background: #27ae60;
+    }
+
+    .list-group-item div:first-child:hover {
+        cursor: pointer;
+    }
+</style>
+<script>
+    function myClick(n) {
+        alert(n); 
+        //location.href = "OrderInfo.html";
+    }
+    function btnClick() {
+        alert("btn");
+    }
+</script>
+
+<div class="row thumbnail center">
+    <div class="col-sm-12">
+        <h1 class="text-center" style="margin-bottom: 30px">我的订单</h1>
+    </div>
+    <div class="col-sm-12 thumbnail">
+        <div class="col-sm-3 line-center">订单编号</div>
+        <div class="col-sm-2 line-center">订单状态</div>
+        <div class="col-sm-2 line-center">商品数量 </div>
+        <div class="col-sm-2 line-center">订单总价</div>
+        <div class="col-sm-3 line-center">操作</div>
+    </div>
+    <div class="list-group">
+        @foreach (Order order in Model)
+        {
+            <div class="col-sm-12  list-group-item">
+                <div class="col-sm-3 line-center" onclick="myClick(@order.id)">@order.ordernum</div>
+                <div class="col-sm-2 line-center">@order.status</div>
+                <div class="col-sm-2 line-center">@order.num </div>
+                <div class="col-sm-2 line-center">@order.price 元</div>
+                <div class="col-sm-3 line-center">
+                    <button class="btn btn-danger" onclick="btnClick()">删除订单</button>
+                    <button class="btn btn-success" onclick="btnClick()">提交订单</button>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>

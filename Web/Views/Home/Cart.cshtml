@@ -1,0 +1,55 @@
+﻿@model Models.Cart
+
+@{
+    ViewBag.Title = "购物车";
+}
+<div class="row thumbnail center">
+    <div class="col-sm-12">
+        <h1 class="text-center" style="margin-bottom: 30px">购物车</h1>
+    </div>
+    <div class=" list-group">
+
+        <div class="col-sm-12 thumbnail">
+            <div class="col-sm-4 line-center">图书</div>
+            <div class="col-sm-1 line-center">单价</div>
+            <div class="col-sm-4 line-center">数量 </div>
+            <div class="col-sm-2 line-center">小计</div>
+            <div class="col-sm-1 line-center">操作</div>
+        </div>
+        @if (Model != null)
+        {
+            foreach (var item in Model.CartItems)
+            {
+                <div class="col-sm-12  list-group-item">
+                    <div class="col-sm-1 line-center" style="width: 50px;height: 50px;">
+
+                        <img src="~/@item.Book.imageUrl" style="height: 100%;" alt="" />
+                    </div>
+                    <div class="col-sm-3 line-center">@item.Book.name</div>
+                    <div class="col-sm-1 line-center">@item.Book.price</div>
+                    <div class="col-sm-4 line-center">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </button>
+                        <input type="text" class="small" value="123" />
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="col-sm-2 line-center">@item.price</div>
+                    <div class="col-sm-1 line-center"><button class="btn btn-danger">删除</button></div>
+                </div>
+            }
+        }
+        <div class="col-sm-12 thumbnail">
+            <div class=" col-sm-offset-4 col-sm-2 text-right">总数：</div>
+            <div class="col-sm-2">@(Model == null ? 0 : Model.num )</div>
+            <div class="col-sm-2 text-right">总价：</div>
+            <div class="col-sm-2">@(Model == null ? 0 : Model.price )</div>
+        </div>
+    </div>
+    <div class="col-sm-offset-7 col-sm-5" style="padding: 30px;">
+        <div class="col-sm-6 btn btn-success btn-block">继续购物</div>
+        <div class="col-sm-6  btn btn-success btn-block">提交订单</div>
+    </div>
+</div>

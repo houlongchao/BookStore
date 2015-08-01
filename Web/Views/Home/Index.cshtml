@@ -1,0 +1,51 @@
+﻿@using Models
+@model IList<Models.Book>
+
+@{
+    ViewBag.Title = "首页";
+}
+
+@* 广告栏 *@
+<div class="jumbotron">
+    <h1>图书商城</h1>
+    <p>...</p>
+    <p><a class="btn btn-primary btn-lg" href="#" role="button">了解更多</a></p>
+</div>
+@* 图书分类 *@
+<ul class="nav nav-tabs" id="myTabs">
+    @foreach (Category c in ViewBag.Categories)
+    {
+        if (c.id == Model[0].categoryId)
+        {
+            <li class="active"><a href="?category=@c.id">@c.name</a></li>
+        }
+        else
+        {
+            <li><a href="?category=@c.id">@c.name</a></li>
+        }
+
+    }
+    
+</ul>
+@* 图书列表 *@
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-sm-4 col-md-3">
+            <div class="thumbnail">
+                <a href="~/Home/BookInfo?bookId=@book.id">
+                    <img style="width: 100%; height: 200px; display: block;" alt="100%x200" src="~/@book.imageUrl" data-holder-rendered="true">
+                </a>
+                <div class="caption center">
+                    <p><strong>@book.name</strong></p>
+                    <p><small>价格:@book.price</small></p>
+                    <p><a class="btn btn-primary btn-block" role="button" href="~/Home/BookInfo?bookId=@book.id">查看详情</a></p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@* 分页 *@
+<nav class="center">
+    @ViewBag.Page
+</nav>

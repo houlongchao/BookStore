@@ -1,0 +1,30 @@
+﻿@model Models.Customer
+@{
+    ViewBag.Title = "用户信息";
+}
+
+<div class="row thumbnail center col-sm-12">
+    <div class="col-sm-12">
+        <h1 class="text-center" style="margin-bottom: 30px">个人中心</h1>
+    </div>
+
+    <ul class="nav nav-tabs nav-justified" id="myTabs">
+        <li class="active"><a href="#userHome">用户信息</a></li>
+        <li><a href="#editInfo">信息修改</a></li>
+        <li><a href="#editPassword">密码修改</a></li>
+        <li><a href="#orderManager">订单管理</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        @* 用户信息 *@
+        <div role="tabpanel" class="tab-pane active" id="userHome">
+            <p>@Model.username</p>
+
+            <p>@Model.password</p>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="editInfo">信息修改</div>
+        <div role="tabpanel" class="tab-pane" id="editPassword">密码修改</div>
+        <div role="tabpanel" class="tab-pane" id="orderManager">订单管理</div>
+    </div>
+</div>

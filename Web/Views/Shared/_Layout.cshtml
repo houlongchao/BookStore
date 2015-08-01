@@ -1,0 +1,76 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" />
+    @Styles.Render("~/Assets/css")
+    @Scripts.Render("~/Assets/js")
+    <title>@ViewBag.Title</title>
+    <style>
+        .row {
+            margin-top: 20px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .pagination {
+            background: #cccccc;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#myTabs a').click(function (e) {
+                $(this).tab('show');
+            });
+        })
+    </script>
+</head>
+<body>
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                </button>
+                <a class="navbar-brand" href="~/Home/Index">图书商城</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="~/Home/Index">首页</a></li>
+                    <li><a href="~/Home/Order">我的订单</a></li>
+                    <li><a href="~/Home/UserInfo">个人中心</a></li>
+                    <li><a href="~/Home/FriendLink">友情链接</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right hidden-sm">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li><a href="~/Home/UserInfo">@User.Identity.Name</a></li>
+                        <li><a href="~/Home/Logout">注销</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Home/Login">登录</a></li>
+                        <li><a href="~/Home/Register">注册</a></li>
+                    }
+                   
+                    <li>
+                        <a href="~/Home/Cart"><span class="glyphicon glyphicon-shopping-cart">购物车</span></a>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+    <!--content-->
+    <div class="container">
+        @RenderBody()
+
+    </div>
+    <br />
+    <!--footer-->
+    <div class="navbar navbar-default navbar-static-bottom">
+        版权声明区
+    </div>
+</body>
+</html>
