@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{313777D3-BBBC-4E5B-86D6-A68767BA410D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "添加测试数据", "添加测试数据\添加测试数据.csproj", "{8BCA2A41-06F7-47FA-AB8C-F374B02FF2F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{313777D3-BBBC-4E5B-86D6-A68767BA410D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{313777D3-BBBC-4E5B-86D6-A68767BA410D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{313777D3-BBBC-4E5B-86D6-A68767BA410D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BCA2A41-06F7-47FA-AB8C-F374B02FF2F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BCA2A41-06F7-47FA-AB8C-F374B02FF2F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BCA2A41-06F7-47FA-AB8C-F374B02FF2F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BCA2A41-06F7-47FA-AB8C-F374B02FF2F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
