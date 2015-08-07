@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.btnAddBook = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAddBook
@@ -41,11 +42,22 @@
             this.btnAddBook.UseVisualStyleBackColor = true;
             this.btnAddBook.Click += new System.EventHandler(this.btnAddBook_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(134, 24);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(195, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "添加登录用户（user,admin）";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(419, 279);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnAddBook);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -56,6 +68,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnAddBook;
+        private System.Windows.Forms.Button button1;
     }
 }
 

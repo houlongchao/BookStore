@@ -148,5 +148,71 @@ targetReader:财经读者、历史爱好者、政府机关人员、大学生等"
             return i % 20 + 30;
         }
         #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            AddUser();
+            MessageBox.Show("添加成功！", "提示");
+        }
+
+        private void AddUser()
+        {
+            string sql = @"INSERT INTO [dbo].[Customer]
+           ([username]
+           ,[password]
+           ,[sex]
+           ,[telephone]
+           ,[description]
+           ,[address]
+           ,[email]
+           ,[actived]
+           ,[code]
+           ,[role])
+     VALUES
+           (@username
+           ,@password
+           ,@sex
+           ,@telephone
+           ,@description
+           ,@address
+           ,@email
+           ,@actived
+           ,@code
+           ,@role)";
+
+            //admin     21232f297a57a5a743894a0e4a801fc3
+            //user      ee11cbb19052e40b07aac0ca060c23ee
+            SqlParameter[] pms = new SqlParameter[]
+            {
+                new SqlParameter("@username","admin"),
+                new SqlParameter("@password","21232f297a57a5a743894a0e4a801fc3"),
+                new SqlParameter("@sex","1"),
+                new SqlParameter("@telephone","110"),
+                new SqlParameter("@description","管理员"),
+                new SqlParameter("@address","管理员地址"),
+                new SqlParameter("@email","admin@bookstore.com"),
+                new SqlParameter("@actived","0"),
+                new SqlParameter("@code","0"),
+                new SqlParameter("@role","1")
+
+            };
+            SqlHelper.ExecuteNonQuery(sql, CommandType.Text, pms);
+
+            pms = new SqlParameter[]
+            {
+                new SqlParameter("@username","user"),
+                new SqlParameter("@password","ee11cbb19052e40b07aac0ca060c23ee"),
+                new SqlParameter("@sex","0"),
+                new SqlParameter("@telephone","120"),
+                new SqlParameter("@description","用户"),
+                new SqlParameter("@address","用户地址"),
+                new SqlParameter("@email","user@bookstore.com"),
+                new SqlParameter("@actived","0"),
+                new SqlParameter("@code","0"),
+                new SqlParameter("@role","0")
+
+            };
+            SqlHelper.ExecuteNonQuery(sql, CommandType.Text, pms);
+        }
     }
 }
