@@ -17,7 +17,6 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
-        //
         // GET: /Home/
         Models.BookStoreEntities bse = new BookStoreEntities();
         /// <summary>
@@ -49,6 +48,7 @@ namespace Web.Controllers
             return View(books);
         } 
         #endregion
+
         #region 图书详情
         /// <summary>
         /// 图书详情
@@ -163,9 +163,10 @@ namespace Web.Controllers
             List<Order> orders = bse.Orders.Where(o => o.customer == customer.id).ToList();
 
             return View(orders);
-        } 
+        }
         #endregion
 
+        #region 购物车操作
         /// <summary>
         /// 购物车
         /// </summary>
@@ -175,7 +176,7 @@ namespace Web.Controllers
         {
             //当前用户对象
             Customer customer = Session["user"] as Customer;
-           //当前用户的购物车
+            //当前用户的购物车
             Cart cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
             return View(cart);
         }
@@ -194,7 +195,7 @@ namespace Web.Controllers
 
             //判断当前用户是否有购物车
             var cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
-            if (cart==null)
+            if (cart == null)
             {
                 //没有则创建购物车
                 customer = bse.Customers.Where(c => c.id == customer.id).FirstOrDefault();
@@ -236,10 +237,10 @@ namespace Web.Controllers
 
             //得到购物车
             var cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
-           
+
             //得到书本条目
             var cartItem = cart.CartItems.Where(c => c.bookId == bookId).FirstOrDefault();
-            
+
             //更新购物车明细的数量和价钱
             cartItem.num -= 1;
             cartItem.price = cartItem.Book.price * cartItem.num;
@@ -247,9 +248,9 @@ namespace Web.Controllers
             //跟新购物车的明细和价钱
             cart.num -= 1;
             cart.price -= cartItem.Book.price;
-            
+
             //如果书本条目少于或等于0，则删除该条目
-            if (cartItem.num<=0)
+            if (cartItem.num <= 0)
             {
                 cart.CartItems.Remove(cartItem);
             }
@@ -283,7 +284,7 @@ namespace Web.Controllers
 
             //删除条目
             cart.CartItems.Remove(cartItem);
-       
+
             bse.SaveChanges();
 
             return RedirectToAction("Cart", "Home");
@@ -295,9 +296,10 @@ namespace Web.Controllers
         /// <param name="bookId"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public ActionResult CartItem(int bookId,string op)
+        [RolesAuthorize]
+        public ActionResult CartItem(int bookId, string op)
         {
-            if ("add".Equals(op,StringComparison.CurrentCultureIgnoreCase))
+            if ("add".Equals(op, StringComparison.CurrentCultureIgnoreCase))
             {
                 AddCartItem(bookId);
             }
@@ -305,12 +307,13 @@ namespace Web.Controllers
             {
                 SubCartItem(bookId);
             }
-            else if("del".Equals(op, StringComparison.CurrentCultureIgnoreCase))
+            else if ("del".Equals(op, StringComparison.CurrentCultureIgnoreCase))
             {
                 DelCartItem(bookId);
             }
             return RedirectToAction("Cart", "Home");
-        }
+        } 
+        #endregion
 
         #region 获得分页组件
         /// <summary>
