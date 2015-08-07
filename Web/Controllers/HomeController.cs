@@ -20,7 +20,6 @@ namespace Web.Controllers
         //
         // GET: /Home/
         Models.BookStoreEntities bse = new BookStoreEntities();
-
         /// <summary>
         /// 页面大小值
         /// </summary>
@@ -181,14 +180,26 @@ namespace Web.Controllers
             return View(cart);
         }
 
-        [Authorize]
-        public ActionResult AddCartItem()
+        [RolesAuthorize]
+        public ActionResult AddCartItem(string bookId)
         {
-            string bookId = Request.QueryString["bookId"];
+            //string bookId = Request.QueryString["bookId"];
 
-           //得到当前用户id
-           
-            //判断当前用户的购物车中是否有该书
+            //得到当前用户
+            Customer customer = Session["user"] as Customer;
+
+            //判断当前用户是否有购物车
+            var cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
+            if (cart==null)
+            {
+                //没有则创建购物车
+                customer = bse.Customers.Where(c => c.id == customer.id).FirstOrDefault();
+                cart = new Models.Cart(customer);
+                bse.Carts.Add(cart);
+                bse.SaveChanges();
+            }
+
+
             //有则更新，无则添加
 
             return RedirectToAction("Cart", "Home");
