@@ -13,7 +13,8 @@ namespace Web.Attribute
             {
                 return false; 
             }
-            
+            Users = customer.username;
+            Roles = customer.role == 0 ? "user" : "admin";
             return customer.role == 0;
         }
     }

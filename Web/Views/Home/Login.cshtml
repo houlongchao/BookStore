@@ -8,7 +8,7 @@
         <h1 class="text-center" style="margin-bottom: 30px">用户登录</h1>
     </div>
     <div class="col-sm-6">
-        <form class="form-horizontal caption" action="~/Home/DoLogin" method="POST">
+        <form class="form-horizontal caption" method="POST">
             <div class="form-group">
                 <label for="username" class="col-sm-3 control-label">用户名</label>
                 <div class="col-sm-8">
@@ -28,8 +28,10 @@
                             <input type="checkbox" name="checkbox">记住我
                         </label>
                     </div>
+                    @Html.ValidationMessage("errorMessage")
                 </div>
             </div>
+            
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-5">
                     <button type="submit" class="btn btn-success btn-block">登录</button>

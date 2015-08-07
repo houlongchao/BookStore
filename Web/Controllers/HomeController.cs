@@ -73,36 +73,46 @@ namespace Web.Controllers
             return View();
         }
         /// <summary>
-        /// 登录处理方法
+        /// 登录
         /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult DoLogin()
+        public ActionResult Login(string username, string password,string returnUrl)
         {
-            //获得传过来的参数
-            string username = Request.Form["username"];
-            string password = Request.Form["password"];
-
             //判断传过来的值是否为空
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                return View("Login");
+                return View();
             }
             //得到登录用户实体
             Customer customer = bse.Customers.Where(c => c.username == username).FirstOrDefault();
-            if (customer!=null && password.ToMD5().Equals(customer.password))
+            if (customer != null && password.ToMD5().Equals(customer.password))
             {
-               
-                FormsAuthentication.SetAuthCookie(customer.username,false);
+                if (customer.role==1)
+                {
+                    ModelState.AddModelError("errorMessage", "用户没有权限!");
+                    return View();
+                }
+
                 Session["user"] = customer;
-                return RedirectToAction("Index", "Home");
+                if (string.IsNullOrEmpty(returnUrl))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return Redirect(returnUrl);
+                }
+               
             }
             else
             {
-                ModelState.AddModelError("CredentiaError","用户名或密码错误！");
-                return View("Login");
+                ModelState.AddModelError("errorMessage", "用户名或密码错误！");
+                return View();
             }
-        } 
+        }
         #endregion
 
         #region 友情链接
@@ -124,7 +134,7 @@ namespace Web.Controllers
         /// <returns></returns>
         public ActionResult Logout()
         {
-            FormsAuthentication.SignOut();
+            Session.Remove("user");
             return RedirectToAction("Index", "Home");
         } 
         #endregion
@@ -134,11 +144,10 @@ namespace Web.Controllers
         /// 用户信息
         /// </summary>
         /// <returns></returns>
-        [Authorization]
+        [RolesAuthorize]
         public ActionResult UserInfo()
         {
-            string username = User.Identity.Name;
-            Customer customer = bse.Customers.Where(c => c.username == username).FirstOrDefault();
+            Customer customer = Session["user"] as Customer;
             return View(customer);
         } 
         #endregion
@@ -148,11 +157,10 @@ namespace Web.Controllers
         /// 我的订单
         /// </summary>
         /// <returns></returns>
-        [Authorization]
+        [RolesAuthorize]
         public ActionResult Order()
         {
-            string username = User.Identity.Name;
-            Customer customer = bse.Customers.Where(c => c.username == username).FirstOrDefault();
+            Customer customer = Session["user"] as Customer;
             List<Order> orders = bse.Orders.Where(o => o.customer == customer.id).ToList();
 
             return View(orders);
@@ -163,13 +171,11 @@ namespace Web.Controllers
         /// 购物车
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        [RolesAuthorize]
         public ActionResult Cart()
         {
-            //当前用户名
-            string username = User.Identity.Name;
             //当前用户对象
-            Customer customer = bse.Customers.Where(c => c.username.Equals(username)).FirstOrDefault();
+            Customer customer = Session["user"] as Customer;
            //当前用户的购物车
             Cart cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
             return View(cart);

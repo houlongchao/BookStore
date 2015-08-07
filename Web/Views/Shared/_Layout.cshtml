@@ -44,9 +44,9 @@
                     <li><a href="~/Home/FriendLink">友情链接</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right hidden-sm">
-                    @if (Request.IsAuthenticated)
+                    @if (Session["user"]!=null)
                     {
-                        <li><a href="~/Home/UserInfo">@User.Identity.Name</a></li>
+                        <li><a href="~/Home/UserInfo">@((Session["user"] as Models.Customer).username)</a></li>
                         <li><a href="~/Home/Logout">注销</a></li>
                     }
                     else
