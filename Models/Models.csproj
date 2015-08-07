@@ -81,6 +81,7 @@
       <DependentUpon>BookStore.tt</DependentUpon>
     </Compile>
     <Compile Include="Exc\CartExc.cs" />
+    <Compile Include="Exc\CartItemExc.cs" />
     <Compile Include="FriendLink.cs">
       <DependentUpon>BookStore.tt</DependentUpon>
     </Compile>

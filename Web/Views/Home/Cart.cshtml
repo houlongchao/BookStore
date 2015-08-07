@@ -21,23 +21,28 @@
             foreach (var item in Model.CartItems)
             {
                 <div class="col-sm-12  list-group-item">
-                    <div class="col-sm-1 line-center" style="width: 50px;height: 50px;">
-
-                        <img src="~/@item.Book.imageUrl" style="height: 100%;" alt="" />
-                    </div>
-                    <div class="col-sm-3 line-center">@item.Book.name</div>
+                    <a href="~/Home/BookInfo?bookId=@item.Book.id" class="col-sm-4 line-center">
+                        <div class="col-sm-4 line-center" style="width: 50px;height: 50px;">
+                            <img src="~/@item.Book.imageUrl" style="height: 100%;" alt="" />
+                        </div>
+                        <div class="col-sm-8 line-center">@item.Book.name</div>
+                    </a>
                     <div class="col-sm-1 line-center">@item.Book.price</div>
                     <div class="col-sm-4 line-center">
-                        <button type="button" class="btn btn-default">
+                        <a href="~/Home/CartItem?bookId=@item.Book.id&op=sub" class="btn btn-default">
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                        </button>
-                        <input type="text" class="small" value="123" />
-                        <button type="button" class="btn btn-default">
+                        </a>
+                        <input type="text" class="small" value="@item.num" style="width:50px; text-align:center;" />
+                        <a href="~/Home/CartItem?bookId=@item.Book.id&op=add" class="btn btn-default">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        </button>
+                        </a>
                     </div>
-                    <div class="col-sm-2 line-center">@item.price</div>
-                    <div class="col-sm-1 line-center"><button class="btn btn-danger">删除</button></div>
+                    <div class="col-sm-2 line-center">@item.price </div>
+                    <div class="col-sm-1 line-center">
+                        <a href="~/Home/CartItem?bookId=@item.Book.id&op=del" class="btn btn-danger">
+                            删除
+                        </a>
+                    </div>
                 </div>
             }
         }
@@ -49,7 +54,7 @@
         </div>
     </div>
     <div class="col-sm-offset-7 col-sm-5" style="padding: 30px;">
-        <div class="col-sm-6 btn btn-success btn-block">继续购物</div>
-        <div class="col-sm-6  btn btn-success btn-block">提交订单</div>
+        <a href="~/Home/Index" class="col-sm-6 btn btn-success btn-block">继续购物</a>
+        <a class="col-sm-6  btn btn-success btn-block">提交订单</a>
     </div>
 </div>

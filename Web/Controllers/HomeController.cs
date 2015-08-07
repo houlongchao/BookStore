@@ -179,9 +179,13 @@ namespace Web.Controllers
             Cart cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
             return View(cart);
         }
-
+        /// <summary>
+        /// 给当前登录用户添加一本书
+        /// </summary>
+        /// <param name="bookId">书的id</param>
+        /// <returns></returns>
         [RolesAuthorize]
-        public ActionResult AddCartItem(string bookId)
+        public ActionResult AddCartItem(int bookId)
         {
             //string bookId = Request.QueryString["bookId"];
 
@@ -199,9 +203,112 @@ namespace Web.Controllers
                 bse.SaveChanges();
             }
 
+            var cartItem = cart.CartItems.Where(c => c.bookId == bookId).FirstOrDefault();
+            if (cartItem == null)
+            {
+                var book = bse.Books.Where(b => b.id == bookId).FirstOrDefault();
+                cartItem = new CartItem(book);
+                cart.CartItems.Add(cartItem);
+            }
+            //更新购物车明细的数量和价钱
+            cartItem.num += 1;
+            cartItem.price = cartItem.Book.price * cartItem.num;
 
-            //有则更新，无则添加
+            //跟新购物车的明细和价钱
+            cart.num += 1;
+            cart.price += cartItem.Book.price;
 
+            bse.SaveChanges();
+
+            return RedirectToAction("Cart", "Home");
+        }
+
+        /// <summary>
+        /// 给当前用户减少一本书
+        /// </summary>
+        /// <param name="bookId">书的id</param>
+        /// <returns></returns>
+        [RolesAuthorize]
+        public ActionResult SubCartItem(int bookId)
+        {
+            //得到当前用户
+            Customer customer = Session["user"] as Customer;
+
+            //得到购物车
+            var cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
+           
+            //得到书本条目
+            var cartItem = cart.CartItems.Where(c => c.bookId == bookId).FirstOrDefault();
+            
+            //更新购物车明细的数量和价钱
+            cartItem.num -= 1;
+            cartItem.price = cartItem.Book.price * cartItem.num;
+
+            //跟新购物车的明细和价钱
+            cart.num -= 1;
+            cart.price -= cartItem.Book.price;
+            
+            //如果书本条目少于或等于0，则删除该条目
+            if (cartItem.num<=0)
+            {
+                cart.CartItems.Remove(cartItem);
+            }
+
+            bse.SaveChanges();
+
+            return RedirectToAction("Cart", "Home");
+        }
+
+
+        /// <summary>
+        /// 删除一个条目
+        /// </summary>
+        /// <param name="bookId">书的id</param>
+        /// <returns></returns>
+        [RolesAuthorize]
+        public ActionResult DelCartItem(int bookId)
+        {
+            //得到当前用户
+            Customer customer = Session["user"] as Customer;
+
+            //得到购物车
+            var cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
+
+            //得到书本条目
+            var cartItem = cart.CartItems.Where(c => c.bookId == bookId).FirstOrDefault();
+
+            //跟新购物车的明细和价钱
+            cart.num -= cartItem.num;
+            cart.price -= cartItem.price;
+
+            //删除条目
+            cart.CartItems.Remove(cartItem);
+       
+            bse.SaveChanges();
+
+            return RedirectToAction("Cart", "Home");
+        }
+
+        /// <summary>
+        /// 购物车条目操作
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public ActionResult CartItem(int bookId,string op)
+        {
+            if ("add".Equals(op,StringComparison.CurrentCultureIgnoreCase))
+            {
+                AddCartItem(bookId);
+            }
+            else if ("sub".Equals(op, StringComparison.CurrentCultureIgnoreCase))
+            {
+                SubCartItem(bookId);
+            }
+            else if("del".Equals(op, StringComparison.CurrentCultureIgnoreCase))
+            {
+                DelCartItem(bookId);
+            }
             return RedirectToAction("Cart", "Home");
         }
 
