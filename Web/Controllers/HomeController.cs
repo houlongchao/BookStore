@@ -312,8 +312,128 @@ namespace Web.Controllers
                 DelCartItem(bookId);
             }
             return RedirectToAction("Cart", "Home");
-        } 
+        }
         #endregion
+
+        #region 订单操作
+        
+        /// <summary>
+        /// 从购物车提交订单
+        /// </summary>
+        /// <returns></returns>
+        [RolesAuthorize]
+        public ActionResult CartToOrder()
+        {
+            //当前用户
+            var customer = Session["user"] as Customer;
+
+            //当前用户的购物车
+            var cart = bse.Carts.Where(c => c.customerId == customer.id).FirstOrDefault();
+
+            //为当前用户创建一个订单
+            Models.Order order = new Models.Order()
+            {
+                num = cart.num,
+                price = cart.price,
+                customer = cart.customerId,
+                ordernum = Guid.NewGuid().ToString(),
+                status = 0,
+                receiverAddress = customer.address,
+                receiverName = customer.username,
+                receiverPhone = customer.telephone
+            };
+            order = bse.Orders.Add(order);
+
+            //为订单添加明细
+            foreach (var item in cart.CartItems)
+            {
+                var orderItem = new Models.OrdersItem()
+                {
+                    num = item.num,
+                    price =  item.price,
+                    bookId = item.bookId,
+                    ordersId = order.id
+                };
+                order.OrdersItems.Add(orderItem);
+            }
+
+            //清空购物车
+            bse.Carts.Remove(cart);
+
+            bse.SaveChanges();
+
+            return Redirect("~/Home/OrderInfo?orderId=" +order.id);
+        }
+
+        /// <summary>
+        /// 订单详情
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [RolesAuthorize]
+        public ActionResult OrderInfo(int orderId)
+        {
+            var order = bse.Orders.Where(o => o.id == orderId).FirstOrDefault();
+            return View(order);
+        }
+
+        /// <summary>
+        /// 删除订单
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [RolesAuthorize]
+        public ActionResult DelOrder(int orderId)
+        {
+            Customer customer = Session["user"] as Customer;
+            var order = bse.Orders.Where(o => o.id == orderId).FirstOrDefault();
+            if (order.customer==customer.id)
+            {
+                var oi = bse.OrdersItems.Where(i => i.ordersId == order.id);
+                bse.OrdersItems.RemoveRange(oi);
+                bse.Orders.Remove(order);
+                bse.SaveChanges();
+            }
+            return RedirectToAction("Order");
+        }
+
+
+        /// <summary>
+        /// 付款
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="receiverName"></param>
+        /// <param name="receiverAddress"></param>
+        /// <param name="receiverPhone"></param>
+        /// <returns></returns>
+        [RolesAuthorize]
+        [HttpPost]
+        public ActionResult GoPay(int orderId,string receiverName,string receiverAddress,string receiverPhone)
+        {
+            //获得订单
+            var order = bse.Orders.Where(o => o.id == orderId).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(receiverName) && string.IsNullOrEmpty(receiverAddress) && string.IsNullOrEmpty(receiverPhone))
+            {
+
+            }
+            else
+            {
+                order.receiverName = receiverName;
+                order.receiverAddress = receiverAddress;
+                order.receiverPhone = receiverPhone;
+                bse.SaveChanges();
+            }
+
+
+            order.status = 1;
+            bse.SaveChanges();
+
+            return Redirect("OrderInfo?orderId=" + order.id);
+        }
+
+        #endregion
+
 
         #region 获得分页组件
         /// <summary>

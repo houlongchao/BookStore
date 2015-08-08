@@ -77,7 +77,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ordernum" Type="varchar" MaxLength="200" />
           <Property Name="price" Type="decimal" Precision="10" Scale="2" />
           <Property Name="num" Type="int" />
@@ -91,7 +91,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="bookId" Type="int" />
           <Property Name="price" Type="decimal" Precision="10" Scale="2" />
           <Property Name="num" Type="int" />
